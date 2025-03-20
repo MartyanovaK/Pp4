@@ -26,17 +26,17 @@ public class RestApiController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping("/admin")
     public List<User> getAll() {
         return userService.allUsers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public User getOneUser(@PathVariable("id") long id) {
         return userService.findById(id);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/admin/{id}")
     public ResponseEntity<HttpStatus> updateUser(@RequestBody @Valid User user, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             StringBuilder errorString = new StringBuilder();
@@ -50,7 +50,7 @@ public class RestApiController {
         userService.edit(user, user.getId());
         return ResponseEntity.ok(HttpStatus.OK);
     }
-    @PostMapping("")
+    @PostMapping("/admin")
     public ResponseEntity<HttpStatus> saveUser(@RequestBody @Valid User user, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             StringBuilder errorString = new StringBuilder();
@@ -65,7 +65,7 @@ public class RestApiController {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable("id") long id) {
         userService.delete(id);

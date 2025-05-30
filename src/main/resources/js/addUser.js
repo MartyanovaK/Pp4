@@ -1,5 +1,5 @@
 async function createNewUser(user) {
-    await fetch("api/users",{
+    await fetch("/api/users/admin",{
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(user)

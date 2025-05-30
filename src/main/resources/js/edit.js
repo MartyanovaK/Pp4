@@ -1,6 +1,6 @@
 async function sendDataEditUser(user) {
-    await fetch("/api/users/", {
-        method : "PUT",
+    await fetch("/api/users/admin/", {
+        method : "PATCH",
         headers : {'Content-type': 'application/json'},
         body : JSON.stringify(user)
     });

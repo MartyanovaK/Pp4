@@ -1,10 +1,11 @@
 async function dataAboutAllUsers() {
-    const response= await fetch("/api/users");
+    const response= await fetch("/api/users/admin");
     return response.json();
 }
 
+
 async function dataAboutCurrentUser() {
-    const resp = await fetch("api/users/");
+    const resp = await fetch("/api/users/user/");
     return resp.json();
 }
 
@@ -21,7 +22,7 @@ async function fillTableOfAllUsers() {
                  <td>${user.lastName}</td>
                  <td>${user.age}</td>
                  <td>${user.email}</td>
-                 <td>${user.role.map(role => role.role).join(' ')}</td>
+                 <td>${user.role?.map(role => role.role).join(' ') ?? 'ROLE_USER'}</td>
                  <td> <button 
                  type="button" class="btn btn-primary" 
                  data-bs-toggle="modal" 

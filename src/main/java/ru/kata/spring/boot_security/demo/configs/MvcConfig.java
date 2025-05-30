@@ -26,7 +26,8 @@ public class MvcConfig implements WebMvcConfigurer {
                 .allowCredentials(true);
     }
 
-    public void addViewController(ViewControllerRegistry registry) {
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/user").setViewName("user");
         registry.addViewController("/admin").setViewName("admin");
     }

@@ -1,9 +1,14 @@
 async function createNewUser(user) {
-    await fetch("/api/users/admin",{
+    const response = await fetch("/api/users/admin/${user.id}", {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(user)
     });
+
+    if (!response.ok) {
+        throw new Error('Failed to create user');
+    }
+    return await response.json();
 }
 
 async function addNewUser() {
@@ -12,35 +17,42 @@ async function addNewUser() {
     userForm.addEventListener("submit", async function(event) {
         event.preventDefault();
 
-        const name =userForm.querySelector(#name).value.trim();
-        const lastName = userForm.querySelector(#lastname).value.trim();
-        const age = userForm.querySelector(#age).value.trim();
-        const email = userForm.querySelector(#email).value.trim();
-        const password = userForm.querySelector(#password).value.trim();
+
+        const name = userForm.querySelector('#name').value.trim();
+        const lastName = userForm.querySelector('#lastname').value.trim();
+        const age = userForm.querySelector('#age').value.trim();
+        const email = userForm.querySelector('#email').value.trim();
+        const password = userForm.querySelector('#password').value.trim();
 
         const roleSelected = document.getElementById("roles");
-        let role = [];
-        for (let option in roleSelected.selectedOptions) {
-            if (option.value === ROLE_USER.role) {
-                role.push(ROLE_USER);
-            } else if(option.value === ROLE_ADMIN.role) {
-                role.push(ROLE_ADMIN)
+        let roles = [];
+
+        // Исправлено: используем of вместо in и правильный синтаксис
+        for (let option of roleSelected.selectedOptions) {
+            if (option.value === 'ROLE_USER') {
+                roles.push('ROLE_USER');
+            } else if (option.value === 'ROLE_ADMIN') {
+                roles.push('ROLE_ADMIN');
             }
         }
 
         const newUserData = {
-            name : name,
-            lastName : lastName,
-            age : age,
-            email : email,
-            password : password,
-            role : role
+            name: name,
+            lastName: lastName,
+            age: age,
+            email: email,
+            password: password,
+            roles: roles
         };
 
-        await createNewUser(newUserData);
-        userForm.reset();
-
-        document.querySelector('a#home-tab').click();
-        await fillTableOfAllUsers();
-    })
+        try {
+            await createNewUser(newUserData);
+            userForm.reset();
+            document.querySelector('a#home-tab').click();
+            await fillTableOfAllUsers();
+        } catch (error) {
+            console.error('Error creating user:', error);
+            alert('Failed to create user. See console for details.');
+        }
+    });
 }

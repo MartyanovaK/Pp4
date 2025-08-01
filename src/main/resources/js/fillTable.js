@@ -9,6 +9,7 @@ async function dataAboutCurrentUser() {
     return resp.json();
 }
 
+
 async function fillTableOfAllUsers() {
     const usersTable = document.getElementById("usersTable");
     const users = await dataAboutAllUsers();
@@ -23,15 +24,15 @@ async function fillTableOfAllUsers() {
                  <td>${user.age}</td>
                  <td>${user.email}</td>
                  <td>${user.role?.map(role => role.role).join(' ') ?? 'ROLE_USER'}</td>
-                 <td> <button 
-                 type="button" class="btn btn-primary" 
-                 data-bs-toggle="modal" 
+                 <td> <button
+                 type="button" class="btn btn-primary"
+                 data-bs-toggle="modal"
                  th:data-bs-target="${'#edit' + user.id}">
                                             Edit
-                                        </button> 
+                                        </button>
                  </td>
                  <td>
-                 <button type="button" class="btn btn-danger" 
+                 <button type="button" class="btn btn-danger"
                  data-bs-toggle="modal"
                  th:data-bs-target="'#deleteModal'+ ${user.id}">Delete
                                         </button>

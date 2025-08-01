@@ -1,35 +1,74 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    await showUserEmailOnNavbar();
-    await fillTableAboutCurrentUser();
+    try {
+        await showUserEmailOnNavbar();
+        await fillTableAboutCurrentUser();
+    } catch (error) {
+        console.error('Initialization error:', error);
+    }
 });
 
 async function dataAboutCurrentUser() {
-    const response = await fetch("/api/users/user/");
-    return await response.json();
+    try {
+        console.log(user);
+        const response = await fetch("/api/users/user/${user.id}");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        throw error;
+    }
 }
 
-async function fillTableAboutUser() {
-    const currentUserTable1 = document.getElementById("currentUserTable");
-    const currentUser = await dataAboutCurrentUser();
+async function fillTableAboutCurrentUser() {
+    try {
+        const currentUserTable1 = document.getElementById("currentUserTable");
+        if (!currentUserTable1) return;
 
-    let currentUserTableHTML = "";
-    currentUserTableHTML +=
-        `<tr>
-            <td>${currentUser.id}</td> 
-            <td>${currentUser.name}</td> 
-            <td>${currentUser.lastname}</td> 
-            <td>${currentUser.age}</td> 
-            <td>${currentUser.email}</td> 
-            <td>${currentUser.role.map(role => role.role).join(' ')}</td> 
-        </tr>`;
-    currentUserTable1.innerHTML = currentUserTableHTML;
+        const currentUser = await dataAboutCurrentUser();
+
+        const roles = currentUser.roles || currentUser.role || [];
+        const rolesText = Array.isArray(roles)
+            ? roles.map(r => r.role || r).join(' ')
+            : '';
+
+        currentUserTable1.innerHTML = `
+            <tr>
+                <td>${currentUser.id || ''}</td>
+                <td>${currentUser.name || ''}</td>
+                <td>${currentUser.lastname || currentUser.lastName || ''}</td>
+                <td>${currentUser.age || ''}</td>
+                <td>${currentUser.email || ''}</td>
+                <td>${rolesText}</td>
+            </tr>`;
+    } catch (error) {
+        console.error('Error filling user table:', error);
+        document.getElementById("currentUserTable").innerHTML = `
+            <tr>
+                <td colspan="6">Error loading user data</td>
+            </tr>`;
+    }
 }
 
 async function showUserEmailOnNavbar() {
-    const currentUserEmailNavbar = document.getElementById("currentUserEmailNavbar");
-    const currentUser = await dataAboutCurrentUser();
-    currentUserEmailNavbar.innerHTML =
-        `<strong>${currentUser.email}</strong> 
-                 with roles: 
-                 ${currentUser.role.map(role => role.role).join(' ')}`;
+    try {
+        const currentUserEmailNavbar = document.getElementById("currentUserEmailNavbar");
+        if (!currentUserEmailNavbar) return;
+
+        const currentUser = await dataAboutCurrentUser();
+
+        const roles = currentUser.roles || currentUser.role || [];
+        const rolesText = Array.isArray(roles)
+            ? roles.map(r => r.role || r).join(' ')
+            : '';
+
+        currentUserEmailNavbar.innerHTML = `
+            <strong>${currentUser.email || ''}</strong>
+            with roles: ${rolesText}`;
+    } catch (error) {
+        console.error('Error showing user email:', error);
+        const navbar = document.getElementById("currentUserEmailNavbar");
+        if (navbar) navbar.innerHTML = 'Error loading user data';
+    }
 }

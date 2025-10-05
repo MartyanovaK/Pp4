@@ -20,7 +20,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
+        registry.addMapping("/api/users/**")
                 .allowedOriginPatterns("http://localhost:2020")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowCredentials(true);

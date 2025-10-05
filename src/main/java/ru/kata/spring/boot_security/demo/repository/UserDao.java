@@ -16,5 +16,8 @@ public interface UserDao extends JpaRepository<User, Long> {
     @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles")
     List<User> allUsers();
 
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.name = :username")
+    User findByUsername(String username);
+
 
 }

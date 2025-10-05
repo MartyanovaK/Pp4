@@ -10,12 +10,12 @@
 <header>
   <nav class="navbar navbar-dark bg-dark navbar-fixed-top">
     <div class="container-fluid text-white">
-      <div>
-        <a class id="navbar-brand">
-          <strong id="currentUserEmailNavbar"></strong>
-        </a>
-      </div>
-      <a class="nav-link" href="/logout">Logout</a>
+      <span id="currentUserEmailNavbar"></span>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+      </ul>
     </div>
   </nav>
 </header>
@@ -56,7 +56,7 @@
             <div class="tab-pane fade show active" id="nav-users_table" role="tabpanel"
                  aria-labelledby="nav-users_table-tab">
               <h3><b>All Users</b></h3>
-              <table class="table table-striped bg-white border table-responsive table-hover">
+              <table class="table table-striped bg-white border table-responsive table-hover" id="usersTable">
                 <thead>
                 <tr>
                   <th>ID</th>
@@ -69,7 +69,7 @@
                   <th>Delete</th>
                 </tr>
                 </thead>
-                <tbody id="usersTable">
+                <tbody id="usersTableBody">
                 </tbody>
               </table>
             </div>

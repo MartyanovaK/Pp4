@@ -3,6 +3,8 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -14,62 +16,57 @@ import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 import ru.kata.spring.boot_security.demo.util.UserNotUpdateException;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:2020")
-public class RestApiController {
+public class RestApiAdminController {
     private final UserService userService;
 
     @Autowired
-    public RestApiController(UserService userService) {
+    public RestApiAdminController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/admin")
-    public List<User> getAll() {
-        return userService.allUsers();
+    public ResponseEntity<List<User>> getAll() {
+
+        return new ResponseEntity<>(userService.allUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/user/{id}")
-    public User getOneUser(@PathVariable("id") long id) {
-        return userService.findById(id);
+    public ResponseEntity<User> getOneUser(@PathVariable long id) {
+
+        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
     }
+
+
+
+    @GetMapping("/current")
+    public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.findByUserName(userDetails.getUsername());
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
 
     @PatchMapping("/admin/{id}")
-    public ResponseEntity<HttpStatus> updateUser(@RequestBody @Valid User user, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            StringBuilder errorString = new StringBuilder();
-
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError er : errors) {
-                errorString.append(er.getField()).append(" - ").append(er.getDefaultMessage()).append(";");
-            }
-            throw new UserNotUpdateException(errorString.toString());
-        }
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.edit(user, user.getId());
-        return ResponseEntity.ok(HttpStatus.OK);
+        return new  ResponseEntity<>(HttpStatus.OK);
     }
-    @PostMapping("/admin")
-    public ResponseEntity<HttpStatus> saveUser(@RequestBody @Valid User user, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            StringBuilder errorString = new StringBuilder();
+    @PostMapping("/admin/newUser")
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
 
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError er : errors) {
-                errorString.append(er.getField()).append(" - ").append(er.getDefaultMessage()).append(";");
-            }
-            throw new UserNotCreatedException(errorString.toString());
-        }
         userService.add(user);
-        return ResponseEntity.ok(HttpStatus.CREATED);
+        return new  ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/admin/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable("id") long id) {
+    @DeleteMapping("/admin/delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) {
+
         userService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ExceptionHandler

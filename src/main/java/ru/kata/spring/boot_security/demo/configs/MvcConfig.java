@@ -11,8 +11,8 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/js/**")
-                .addResourceLocations("classpath:/js/")
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/")
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
     }

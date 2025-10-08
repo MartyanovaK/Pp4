@@ -1,5 +1,5 @@
 async function sendDataEditUser(user) {
-    await fetch("/api/users/", {
+    await fetch("/api/users/admin/user.id", {
         method : "PATCH",
         headers : {'Content-type': 'application/json'},
         body : JSON.stringify(user)
@@ -17,7 +17,7 @@ modalEdit.addEventListener("submit", async function (event) {
     event.preventDefault();
 
 
-        const rolesSelected = document.getElementById("rolesEdit");
+        const rolesSelected = document.getElementById("edit-roles");
         let roles = [];
 
         for (let option of rolesSelected.selectedOptions) {

@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
@@ -44,9 +45,11 @@ public class RestApiAdminController {
 
 
     @GetMapping("/current")
-    public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.findByUserName(userDetails.getUsername());
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<User> getCurrentUser(Principal principal) {
+        String username = principal.getName();
+        User currentUser = userService.findByUserName(username);
+        return new ResponseEntity<>(currentUser, HttpStatus.OK);
+
     }
 
 

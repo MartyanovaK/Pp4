@@ -36,7 +36,7 @@ public class RestApiAdminController {
         return new ResponseEntity<>(userService.allUsers(), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<User> getOneUser(@PathVariable long id) {
 
         return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
@@ -45,20 +45,19 @@ public class RestApiAdminController {
 
 
     @GetMapping("/current")
-    public ResponseEntity<User> getCurrentUser(Principal principal) {
-        String username = principal.getName();
-        User currentUser = userService.findByUserName(username);
-        return new ResponseEntity<>(currentUser, HttpStatus.OK);
+    public ResponseEntity<User> getCurrentUser() {
+        return new ResponseEntity<>(userService.getCurrentUser(), HttpStatus.OK);
 
     }
 
 
     @PatchMapping("/admin/{id}")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        userService.edit(user, user.getId());
+    public ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody User user) {
+        user.setId(id);
+        userService.edit(user, id);
         return new  ResponseEntity<>(HttpStatus.OK);
     }
-    @PostMapping("/admin/newUser")
+    @PostMapping("/admin")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
 
         userService.add(user);

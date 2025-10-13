@@ -13,7 +13,7 @@ public interface UserService  {
     User findById(long id);
 
     User findByUserName(String userName);
-
+    User getCurrentUser();
 
 
 

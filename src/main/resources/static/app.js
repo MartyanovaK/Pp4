@@ -180,6 +180,7 @@ async function showUserEmailOnNavbar() {
                 const modal = bootstrap.Modal.getInstance(modalEdit);
 
                 modal.hide();
+                location.reload();
             })
         }
 
@@ -220,6 +221,7 @@ async function showUserEmailOnNavbar() {
             await fillTableOfAllUsers();
             const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
             modal.hide();
+            location.reload();
 
         });
     }
@@ -250,7 +252,7 @@ async function showUserEmailOnNavbar() {
         const email = userForm.querySelector('#emailNew').value.trim();
         const password = userForm.querySelector('#passwordNew').value.trim();
 
-        const roleSelected = document.getElementById("delete-roles");
+        const roleSelected = document.getElementById("roles");
         let roles = [];
 
         for (let option of roleSelected.selectedOptions) {
@@ -284,6 +286,7 @@ async function showUserEmailOnNavbar() {
         userForm.reset();
         document.querySelector('#v-pills-admin').click();
         await fillTableOfAllUsers();
+        location.reload();
 
 
     });

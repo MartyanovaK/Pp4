@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.repository.UserDao;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
 import java.util.List;
@@ -15,10 +15,10 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService{
-    private final UserDao userDao;
+    private final UserRepository userDao;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserRepository userDao) {
         this.userDao = userDao;
     }
 

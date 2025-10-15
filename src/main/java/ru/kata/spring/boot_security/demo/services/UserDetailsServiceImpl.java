@@ -19,8 +19,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         User user = userService.findByUserName(userName);
-        Optional<User> oUser = Optional.of(user);
-        return oUser.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return user;
     }
 
 }

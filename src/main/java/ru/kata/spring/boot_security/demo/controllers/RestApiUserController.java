@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
-import java.security.Principal;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users/user")
@@ -22,7 +22,7 @@ public class RestApiUserController {
     }
 
     @GetMapping
-    public ResponseEntity<User> showUser() {
+    public ResponseEntity<Optional<User>> showUser() {
         return new ResponseEntity<>(userService.getCurrentUser(), HttpStatus.OK);
 
     }

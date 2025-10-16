@@ -1,12 +1,16 @@
 package ru.kata.spring.boot_security.demo.services;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.models.User;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -18,12 +22,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userService.findByUserName(userName);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+        Optional<User> user = userService.findByEmail(userName);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found: " + userName);
         }
 
-        return user;
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.get().getEmail())
+                .password(user.get().getPassword())
+                .authorities(getAuthorities(user.orElse(null)))
+                .build();
     }
 
+    private Collection<? extends GrantedAuthority> getAuthorities(User user) {
+        return user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getRole()))
+                .collect(Collectors.toList());
+    }
 }

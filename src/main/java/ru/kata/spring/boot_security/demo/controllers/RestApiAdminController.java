@@ -3,11 +3,6 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
@@ -16,9 +11,8 @@ import ru.kata.spring.boot_security.demo.util.UserNotCreatedException;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 import ru.kata.spring.boot_security.demo.util.UserNotUpdateException;
 
-import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -45,7 +39,7 @@ public class RestApiAdminController {
 
 
     @GetMapping("/current")
-    public ResponseEntity<User> getCurrentUser() {
+    public ResponseEntity<Optional<User>> getCurrentUser() {
         return new ResponseEntity<>(userService.getCurrentUser(), HttpStatus.OK);
 
     }

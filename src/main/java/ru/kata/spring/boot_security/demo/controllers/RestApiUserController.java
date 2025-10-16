@@ -22,7 +22,7 @@ public class RestApiUserController {
     }
 
     @GetMapping
-    public ResponseEntity<Optional<User>> showUser() {
+    public ResponseEntity<User> showUser() {
         return new ResponseEntity<>(userService.getCurrentUser(), HttpStatus.OK);
 
     }

@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        Optional<User> user = userService.findByEmail(userName);
+        Optional<User> user = Optional.ofNullable(userService.findByEmail(userName));
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found: " + userName);
         }

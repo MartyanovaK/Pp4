@@ -39,7 +39,7 @@ public class RestApiAdminController {
 
 
     @GetMapping("/current")
-    public ResponseEntity<Optional<User>> getCurrentUser() {
+    public ResponseEntity<User> getCurrentUser() {
         return new ResponseEntity<>(userService.getCurrentUser(), HttpStatus.OK);
 
     }
